@@ -1,0 +1,91 @@
+#include <Wire.h>
+#include <Adafruit_MLX90614.h>
+#include <Servo.h>
+
+// ----- SENSOR TEMPERATURA -----
+Adafruit_MLX90614 mlx = Adafruit_MLX90614();
+
+// ----- SERVO -----
+Servo servoMotor;
+
+// ----- ULTRASSOM -----
+const int trigPin = 9;
+const int echoPin = 10;
+
+// ----- VARIÁVEIS -----
+long duracao;
+float distancia;
+
+void setup() {
+  Serial.begin(9600);
+
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  servoMotor.attach(6);
+
+  mlx.begin();
+}
+
+// ----- FUNÇÃO DISTÂNCIA -----
+float medirDistancia() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duracao = pulseIn(echoPin, HIGH);
+
+  float distanciaCM = duracao * 0.034 / 2;
+
+  // Limita ruído (opcional)
+  if (distanciaCM <= 0 || distanciaCM > 400) {
+    return 400;
+  }
+
+  return distanciaCM;
+}
+
+void loop() {
+
+  // ---- 0° → 180° ----
+  for (int angulo = 0; angulo <= 180; angulo += 2) {
+
+    servoMotor.write(angulo);
+    delay(40); // mais suave e rápido
+
+    float distancia = medirDistancia();
+    float tempObjeto = mlx.readObjectTempC();
+    float tempAmbiente = mlx.readAmbientTempC();
+
+    // FORMATO PRO PROCESSING
+    Serial.print(angulo);
+    Serial.print(",");
+    Serial.print(distancia);
+    Serial.print(",");
+    Serial.print(tempObjeto);
+    Serial.print(",");
+    Serial.println(tempAmbiente);
+  }
+
+  // ---- 180° → 0° ----
+  for (int angulo = 180; angulo >= 0; angulo -= 2) {
+
+    servoMotor.write(angulo);
+    delay(40);
+
+    float distancia = medirDistancia();
+    float tempObjeto = mlx.readObjectTempC();
+    float tempAmbiente = mlx.readAmbientTempC();
+
+    Serial.print(angulo);
+    Serial.print(",");
+    Serial.print(distancia);
+    Serial.print(",");
+    Serial.print(tempObjeto);
+    Serial.print(",");
+    Serial.println(tempAmbiente);
+  }
+}

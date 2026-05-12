@@ -1,0 +1,104 @@
+import processing.serial.*;
+
+Serial porta;
+
+String dados = "";
+float angulo = 0;
+float distancia = 0;
+float tempObjeto = 0;
+float tempAmbiente = 0;
+
+void setup() {
+  size(800, 600);
+  
+  println(Serial.list()); // vê as portas disponíveis
+  porta = new Serial(this, Serial.list()[0], 9600);
+  porta.bufferUntil('\n');
+}
+
+void draw() {
+  background(0);
+
+  translate(width/2, height - 50);
+
+  desenharRadar();
+  desenharLinhaScan();
+  desenharObjeto();
+  desenharTexto();
+}
+
+// ----- DESENHO DO RADAR -----
+void desenharRadar() {
+  stroke(0, 255, 0);
+  noFill();
+
+  // Linhas de distância
+  arc(0, 0, 600, 600, PI, TWO_PI); // 30 cm
+  arc(0, 0, 400, 400, PI, TWO_PI); // 20 cm
+  arc(0, 0, 200, 200, PI, TWO_PI); // 10 cm
+
+  // Linhas angulares
+  for (int i = 0; i <= 180; i += 30) {
+    float x = 300 * cos(radians(i));
+    float y = -300 * sin(radians(i));
+    line(0, 0, x, y);
+  }
+}
+
+// ----- LINHA DO SCAN -----
+void desenharLinhaScan() {
+  stroke(0, 255, 0);
+  strokeWeight(2);
+
+  float x = 300 * cos(radians(angulo));
+  float y = -300 * sin(radians(angulo));
+
+  line(0, 0, x, y);
+}
+
+// ----- OBJETO DETECTADO -----
+void desenharObjeto() {
+  if (distancia < 30) {
+    float r = map(distancia, 0, 30, 0, 300);
+
+    float x = r * cos(radians(angulo));
+    float y = -r * sin(radians(angulo));
+
+    stroke(255, 0, 0);
+    strokeWeight(6);
+    point(x, y);
+  }
+}
+
+// ----- TEXTO NA TELA -----
+void desenharTexto() {
+  fill(0, 255, 0);
+  textSize(16);
+
+  text("Angulo: " + angulo + "°", -380, -520);
+  text("Distancia: " + nf(distancia, 0, 1) + " cm", -380, -490);
+  text("Temp Objeto: " + nf(tempObjeto, 0, 1) + " C", -380, -460);
+  text("Temp Ambiente: " + nf(tempAmbiente, 0, 1) + " C", -380, -430);
+
+  // Legenda das linhas
+  text("10 cm", 110, -100);
+  text("20 cm", 210, -200);
+  text("30 cm", 310, -300);
+}
+
+// ----- RECEBENDO DADOS -----
+void serialEvent(Serial porta) {
+  dados = porta.readStringUntil('\n');
+  dados = trim(dados);
+
+  if (dados != null) {
+    String[] valores = split(dados, ',');
+
+    if (valores.length == 4) {
+      angulo = float(valores[0]);
+      distancia = float(valores[1]);
+      tempObjeto = float(valores[2]);
+      tempAmbiente = float(valores[3]);
+    }
+  }
+}

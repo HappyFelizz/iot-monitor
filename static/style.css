@@ -1,0 +1,73 @@
+body {
+  background: linear-gradient(180deg, #07111f 0%, #0d1b2a 100%);
+  min-height: 100vh;
+}
+
+.hero {
+  background: linear-gradient(135deg, #15314f 0%, #0f2238 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.metric {
+  background: rgba(13, 27, 42, 0.95);
+  color: #e8f0ff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+}
+
+.label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8da4c4;
+  margin-bottom: 0.35rem;
+}
+
+.value {
+  font-size: 1.55rem;
+  font-weight: 700;
+}
+
+.online {
+  color: #4fe3a5;
+}
+
+.offline {
+  color: #ff7b7b;
+}
+
+.raw {
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #cfe6ff;
+}
+
+#radarCanvas {
+  background: radial-gradient(circle at center, rgba(15, 34, 56, 0.8) 0%, rgba(7, 17, 31, 0.95) 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(79, 227, 165, 0.15);
+}
+
+.footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(7, 17, 31, 0.98) 0%, rgba(13, 27, 42, 1) 100%) !important;
+  margin-top: auto;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #8da4c4;
+}
+
+.footer strong {
+  color: #4fe3a5;
+  letter-spacing: 0.05em;
+}
+
+.footer small {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: #5a7b9c;
+}
