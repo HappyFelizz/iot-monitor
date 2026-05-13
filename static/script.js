@@ -126,7 +126,7 @@ let logsState = { start: 0, lines: 200, total: 0 };
 
 function renderParsedEntries(entries) {
   if (!entries || entries.length === 0) {
-    logsViewEl.innerHTML = '<div class="text-muted">Nenhuma entrada de log para mostrar.</div>';
+    logsViewEl.innerHTML = '<div class="small">Nenhuma entrada de log para mostrar.</div>';
     return;
   }
 
