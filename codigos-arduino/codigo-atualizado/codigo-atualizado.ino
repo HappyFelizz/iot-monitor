@@ -61,22 +61,21 @@ void loop() {
     delay(50);
 
     distancia = medirDistancia();
+    temperatura = mlx.readObjectTempC();
 
     if (distancia < 30) {
 
-      temperatura = mlx.readObjectTempC();
-
       // lógica humano
       if (temperatura > 30 && temperatura < 40) {
-        servoPortao.write(90); // fecha portão
+        servoPortao.write(200); // fecha portão
         fechouPortao = true;
       } else {
-        servoPortao.write(0); // mantém aberto
+        servoPortao.write(90); // mantém aberto
         fechouPortao = false;
       }
 
     } else {
-      servoPortao.write(0);
+      servoPortao.write(90);
       fechouPortao = false;
     }
 
@@ -107,21 +106,20 @@ void loop() {
     delay(50);
 
     distancia = medirDistancia();
+    temperatura = mlx.readObjectTempC();
 
     if (distancia < 30) {
 
-      temperatura = mlx.readObjectTempC();
-
       if (temperatura > 30 && temperatura < 40) {
-        servoPortao.write(90);
+        servoPortao.write(200);
         fechouPortao = true;
       } else {
-        servoPortao.write(0);
+        servoPortao.write(90);
         fechouPortao = false;
       }
 
     } else {
-      servoPortao.write(0);
+      servoPortao.write(90);
       fechouPortao = false;
     }
 
